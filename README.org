@@ -1,0 +1,17 @@
+#+TITLE: ddate.el
+
+This package provides support for the [[https://github.com/bo0ts/ddate][ddate]] command.
+
+* Installation
+
+You can install this via =use-package= and [[https://github.com/quelpa/quelpa-use-package][=quelpa-use-package=]].
+
+#+begin_src emacs-lisp
+  (use-package ddate
+    :quelpa (ddate :fetcher git :url "https://git.sr.ht/~earneson/emacs-ddate"))
+#+end_src
+
+* Usage
+
+Use the =ddate= and =ddate-pretty= functions to do fun things.
+
