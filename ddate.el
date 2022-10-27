@@ -37,6 +37,11 @@
   :type 'string
   :group 'ddate)
 
+(defcustom ddate-format "Today is %{%A, the %e day of %B%} in the YOLD %Y%N: Celebrate %H!"
+  "Default format for ddate. Try to keep it all on one line."
+  :type ':string
+  :group 'ddate)
+
 (defvar ddate-day-colors '(("Sweetmorn" . "white")
                            ("Boomtime" . "red")
                            ("Pungenday" . "yellow")
@@ -60,7 +65,7 @@
 (defun ddate (&optional day month year)
   "Return the Discordian date as a string."
   (interactive)
-  (let ((shell-command ddate-command))
+  (let ((shell-command (format "%s +\"%s\"" ddate-command ddate-format)))
     (if year
         (setq shell-command (concat shell-command
                                     (format " %d %d %d" day month year))))
