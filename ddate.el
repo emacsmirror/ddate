@@ -1,10 +1,12 @@
-;;; ddate.el --- manage Discordian dates in Emacs                     -*- lexical-binding: t; -*-
+;;; ddate.el --- Manage Discordian dates with ddate                     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022 Erik L. Arneson
 
 ;; Author: Erik L. Arneson <earneson@arnesonium.com>
-;; Keywords: lisp
+;; Keywords: lisp, dates, tools, dashboard
 ;; Version: 0.0.1
+;; URL: https://git.sr.ht/~earneson/emacs-ddate
+;; Package-Requires: ((emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,22 +25,22 @@
 
 ;; This package uses the ddate command
 ;; (https://github.com/bo0ts/ddate) and then munges its output to
-;; produce something pretty. With faces.
+;; produce something pretty.  With faces.
 
 ;;; Code:
 
-(defgroup ddate nil 
-  "Options for handling and displaying the Discordian date"
+(defgroup ddate nil
+  "Options for handling and displaying the Discordian date."
   :prefix "ddate-"
   :group 'applications)
 
 (defcustom ddate-command "ddate"
-  "Command to run to get Discordian date"
+  "Command to run to get Discordian date."
   :type 'string
   :group 'ddate)
 
 (defcustom ddate-format "Today is %{%A, the %e day of %B%} in the YOLD %Y%N: Celebrate %H!"
-  "Default format for ddate. Try to keep it all on one line."
+  "Default format for ddate.  Try to keep it all on one line."
   :type ':string
   :group 'ddate)
 
@@ -47,7 +49,7 @@
                            ("Pungenday" . "yellow")
                            ("Prickle-Prickle" . "green")
                            ("Setting Orange" . "orange"))
-  "Colors associated with the days of the week")
+  "Colors associated with the Discordian days of the week.")
 
 (defvar ddate-holiday-names '("Mungday"
                               "Chaoflux"
@@ -60,10 +62,14 @@
                               "Bureflux"
                               "Maladay"
                               "Afflux")
-  "Names of the Discordian holidays")
+  "Names of the Discordian holidays.")
 
 (defun ddate (&optional day month year)
-  "Return the Discordian date as a string."
+  "Return the Discordian date as a string.
+
+DAY is the day of the month as an integer.
+MONTH is the month as an integer.
+YEAR is a year as an integer."
   (interactive)
   (let ((shell-command (format "%s +\"%s\"" ddate-command ddate-format)))
     (if year
@@ -72,7 +78,12 @@
     (string-trim-right (shell-command-to-string shell-command))))
 
 (defun ddate-pretty (&optional day month year)
-  "Return the Discordian date as a propertized string"
+  "Return the Discordian date as a propertized string.
+
+DAY is the day of the month as an integer.
+MONTH is the month as an integer.
+YEAR is a year as an integer."
+  (interactive)
   (let ((ddate-string (ddate day month year))
         (day-match-rx (rx (group (eval (cons 'or (mapcar #'car ddate-day-colors))))))
         (holiday-match-rx (rx (group (eval (cons 'or ddate-holiday-names)))))
@@ -92,4 +103,5 @@
     ddate-string))
 
 (provide 'ddate)
-;;; test.el ends here
+
+;;; ddate.el ends here
