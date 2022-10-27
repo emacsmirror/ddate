@@ -39,8 +39,13 @@
   :type 'string
   :group 'ddate)
 
-(defcustom ddate-format "Today is %{%A, the %e day of %B%} in the YOLD %Y%N: Celebrate %H!"
-  "Default format for ddate.  Try to keep it all on one line."
+(defcustom ddate-format-immediate "Today is %{%A, the %e day of %B%} in the YOLD %Y%N: Celebrate %H!"
+  "Default format for current ddate.  Try to keep it all on one line."
+  :type ':string
+  :group 'ddate)
+
+(defcustom ddate-format "%{%A, %B %d%}, %Y YOLD%N, %H"
+  "Default format for non-current ddate calls.  Try to keep it all on one line."
   :type ':string
   :group 'ddate)
 
@@ -64,6 +69,11 @@
                               "Afflux")
   "Names of the Discordian holidays.")
 
+(defun ddate-check-command ()
+  "Check if the ddate command exists and is executable."
+  (or (executable-find ddate-command)
+      (file-executable-p ddate-command)))
+
 (defun ddate (&optional day month year)
   "Return the Discordian date as a string.
 
@@ -71,11 +81,22 @@ DAY is the day of the month as an integer.
 MONTH is the month as an integer.
 YEAR is a year as an integer."
   (interactive)
-  (let ((shell-command (format "%s +\"%s\"" ddate-command ddate-format)))
-    (if year
-        (setq shell-command (concat shell-command
-                                    (format " %d %d %d" day month year))))
-    (string-trim-right (shell-command-to-string shell-command))))
+  (let* ((format-string (if (or day month year)
+                            ddate-format
+                          ddate-format-immediate))
+         (shell-command (format "%s +\"%s\"%s 2>/dev/null" ddate-command format-string
+                                (if year
+                                    (format " %d %d %d" day month year)
+                                  "")))
+         ddate-string)
+    (unless (ddate-check-command)
+      (error "Cannot find ddate executable"))
+    (setq ddate-string (string-trim-right (shell-command-to-string shell-command)))
+    (if (string= "Invalid date -- out of range" ddate-string)
+        (error (concat "ddate: " ddate-string)))
+    (if (string= "" ddate-string)
+        (error "Unspecified error: no date returned"))
+    ddate-string))
 
 (defun ddate-pretty (&optional day month year)
   "Return the Discordian date as a propertized string.
