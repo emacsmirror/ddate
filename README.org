@@ -8,10 +8,35 @@ You can install this via =use-package= and [[https://github.com/quelpa/quelpa-us
 
 #+begin_src emacs-lisp
   (use-package ddate
+    :ensure-system-package ddate
     :quelpa (ddate :fetcher git :url "https://git.sr.ht/~earneson/emacs-ddate"))
 #+end_src
 
 * Usage
 
 Use the =ddate= and =ddate-pretty= functions to do fun things.
+
+I like to use it with [[https://github.com/emacs-dashboard/emacs-dashboard][dashboard]] like this:
+
+  #+begin_src emacs-lisp
+    (defun ela/dashboard-insert-ddate (list-size)
+      "Insert the Discordian date into the dashboard."
+      (let ((ddate-string (ddate-pretty)))
+        (dashboard-center-line ddate-string)
+        (insert ddate-string)))
+
+    (use-package dashboard
+      :init (dashboard-setup-startup-hook)
+      :config
+      ;; Add the ddate item provider to the list.
+      (add-to-list 'dashboard-item-generators
+                   '(ddate . ela/dashboard-insert-ddate))
+
+      ;; Set up your items with ddate at the top.
+      (setq dashboard-items '((ddate)
+                              (recents   . 5)
+                              (bookmarks . 5)
+                              (registers . 5))))
+
+  #+end_src
 
