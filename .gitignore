@@ -1,0 +1,12 @@
+# Emacs tmp files
+*~
+
+# Compiled files
+*.elc
+*.eln
+
+# Tags
+TAGS
+
+# My dumb junk
+tmp.*
