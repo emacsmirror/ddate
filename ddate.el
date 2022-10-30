@@ -106,8 +106,14 @@ MONTH is the month as an integer.
 YEAR is a year as an integer."
   (interactive)
   (let ((ddate-string (ddate day month year))
-        (day-match-rx (rx (group (eval (cons 'or (mapcar #'car ddate-day-colors))))))
-        (holiday-match-rx (rx (group (eval (cons 'or ddate-holiday-names)))))
+        (day-match-rx (concat "\\("
+                              (mapconcat (lambda (item)
+                                           (regexp-quote (car item)))
+                                         ddate-day-colors "\\|")
+                              "\\)"))
+        (holiday-match-rx (concat "\\("
+                                  (mapconcat #'regexp-quote ddate-holiday-names "\\|")
+                                  "\\)"))
         day-name)
     ;; Apply colors to the days of the week
     (if (string-match day-match-rx ddate-string)
