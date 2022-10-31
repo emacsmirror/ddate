@@ -84,18 +84,20 @@ YEAR is a year as an integer."
   (let* ((format-string (if (or day month year)
                             ddate-format
                           ddate-format-immediate))
-         (shell-command (format "%s +\"%s\"%s 2>/dev/null" ddate-command format-string
+         (shell-command (format "%s +%s%s 2>/dev/null"
+                                (shell-quote-argument ddate-command)
+                                (shell-quote-argument format-string)
                                 (if year
                                     (format " %d %d %d" day month year)
                                   "")))
          ddate-string)
     (unless (ddate-check-command)
-      (error "Cannot find ddate executable"))
+      (user-error "Cannot find ddate executable"))
     (setq ddate-string (string-trim-right (shell-command-to-string shell-command)))
     (if (string= "Invalid date -- out of range" ddate-string)
-        (error (concat "ddate: " ddate-string)))
+        (user-error (concat "ddate: " ddate-string)))
     (if (string= "" ddate-string)
-        (error "Unspecified error: no date returned"))
+        (user-error "Unspecified error: no date returned"))
     ddate-string))
 
 (defun ddate-pretty (&optional day month year)
