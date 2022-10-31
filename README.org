@@ -1,10 +1,24 @@
 #+TITLE: ddate.el
+#+AUTHOR: Erik L. Arneson
 
 This package provides support for the [[https://github.com/bo0ts/ddate][ddate]] command.
 
 * Installation
 
-You can install this via =use-package= and [[https://github.com/quelpa/quelpa-use-package][=quelpa-use-package=]].
+This package is now available on [[https://melpa.org/][MELPA]], so you can install it by adding MELPA to your list of
+packages and then using =use-package= like this:
+
+  #+begin_src emacs-lisp
+    (require 'package)
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+    (package-initialize)
+
+    (use-package ddate
+      :ensure t)
+  #+end_src
+
+You can also install this package directly from this repository via =use-package= and
+[[https://github.com/quelpa/quelpa-use-package][=quelpa-use-package=]]. 
 
 #+begin_src emacs-lisp
   (use-package ddate
