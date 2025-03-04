@@ -98,6 +98,8 @@ YEAR is a year as an integer."
         (user-error (concat "ddate: " ddate-string)))
     (if (string= "" ddate-string)
         (user-error "Unspecified error: no date returned"))
+    (when (called-interactively-p 'any)
+      (message ddate-string))
     ddate-string))
 
 (defun ddate-pretty (&optional day month year)
@@ -129,6 +131,8 @@ YEAR is a year as an integer."
         (add-text-properties (match-beginning 1) (match-end 1)
                              '(font-lock-face (:foreground "cyan" :weight bold))
                              ddate-string))
+    (when (called-interactively-p 'any)
+      (message ddate-string))
     ddate-string))
 
 (provide 'ddate)
