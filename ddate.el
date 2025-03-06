@@ -34,6 +34,9 @@
   :prefix "ddate-"
   :group 'applications)
 
+(defconst ddate-version "1.0.0"
+  "Version of ddate.el package.")
+
 (defcustom ddate-command "ddate"
   "Command to run to get Discordian date."
   :type 'string
