@@ -4,7 +4,7 @@
 
 ;; Author: Erik L. Arneson <earneson@arnesonium.com>
 ;; Keywords: lisp, dates, tools, dashboard
-;; Version: 0.0.1
+;; Version: 1.0.0
 ;; URL: https://git.sr.ht/~earneson/emacs-ddate
 ;; Package-Requires: ((emacs "24.4"))
 
